@@ -1,7 +1,6 @@
 package MCsCafe;
 
 
-import MCsCafe.*;
 import java.awt.HeadlessException;
 import java.awt.event.ItemEvent;
 import java.io.File;
@@ -35,22 +34,6 @@ import javax.swing.table.TableRowSorter;
  * @author harig
  */
 public class Bills1 extends javax.swing.JFrame {
-
-    static String encrypt(String str) {
-        char[] c = str.toCharArray();
-        for (int n = 0; n < c.length; n++) {
-            c[n] -= 10;
-        }
-        return new String(c);
-    }
-
-    static String decrypt(String str) {
-        char[] c = str.toCharArray();
-        for (int n = 0; n < c.length; n++) {
-            c[n] += 10;
-        }
-        return new String(c);
-    }
 
     private TableRowSorter<TableModel> rowSorter;
 
@@ -88,7 +71,7 @@ public class Bills1 extends javax.swing.JFrame {
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println(e);
             try {
-                Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), encrypt(new java.util.Date(System.currentTimeMillis()).toString()
+                Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), LoginPage.encrypt(new java.util.Date(System.currentTimeMillis()).toString()
                         + " Menu:73:Menu\n" + e.toString() + "\n\n").getBytes(), StandardOpenOption.APPEND);
             } catch (IOException ex) {
             }
@@ -185,7 +168,7 @@ public class Bills1 extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Bill | MC's Café");
         setMinimumSize(new java.awt.Dimension(580, 580));
 
@@ -467,36 +450,33 @@ public class Bills1 extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(245, 245, 245)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(245, 245, 245)
-                                .addComponent(jLabel1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(28, 28, 28)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3))
+                                .addComponent(jLabel15)
                                 .addGap(18, 18, 18)
+                                .addComponent(Keyword, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(AddressTF)
+                                    .addComponent(NameCB, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel15)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(Keyword, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(142, 142, 142)
+                                        .addComponent(jButton1))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(AddressTF)
-                                            .addComponent(NameCB, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(142, 142, 142)
-                                                .addComponent(jButton1))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(65, 65, 65)
-                                                .addComponent(jLabel4)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(MobileTF, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                                        .addGap(65, 65, 65)
+                                        .addComponent(jLabel4)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(MobileTF, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -615,7 +595,7 @@ public class Bills1 extends javax.swing.JFrame {
             }
         } catch (HeadlessException | ClassNotFoundException | SQLException e) {
             try {
-                Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), encrypt(new java.util.Date(System.currentTimeMillis()).toString()
+                Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), LoginPage.encrypt(new java.util.Date(System.currentTimeMillis()).toString()
                         + " Bills:521:jButton1ActionPerformed\n" + e.toString() + "\n\n").getBytes(), StandardOpenOption.APPEND);
             } catch (IOException ex) {
             }
@@ -727,7 +707,7 @@ public class Bills1 extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Bill Processed!");
         } catch (ClassNotFoundException | SQLException e) {
             try {
-                Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), encrypt(new java.util.Date(System.currentTimeMillis()).toString()
+                Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), LoginPage.encrypt(new java.util.Date(System.currentTimeMillis()).toString()
                         + " Bills:632:BillBtnActionPerformed For Inserting into Bill\n" + e.toString() + "\n\n").getBytes(), StandardOpenOption.APPEND);
             } catch (IOException ex) {
             }
@@ -764,7 +744,7 @@ public class Bills1 extends javax.swing.JFrame {
                 stmt.executeUpdate(query);
             } catch (ClassNotFoundException | SQLException e) {
                 try {
-                    Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), encrypt(new java.util.Date(System.currentTimeMillis()).toString()
+                    Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), LoginPage.encrypt(new java.util.Date(System.currentTimeMillis()).toString()
                             + " Bills:664:BillBtnActionPerformed For Inserting into Queue\n" + e.toString() + "\n\n").getBytes(), StandardOpenOption.APPEND);
                 } catch (IOException ex) {
                 }
@@ -796,7 +776,7 @@ public class Bills1 extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Postpaid Updated! Outstanding Balance: " + (outstanding + price));
             } catch (ClassNotFoundException | SQLException e) {
                 try {
-                    Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), encrypt(new java.util.Date(System.currentTimeMillis()).toString()
+                    Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), LoginPage.encrypt(new java.util.Date(System.currentTimeMillis()).toString()
                             + " Bills:697:BillBtnActionPerformed For Getting/Inserting from/into Postpaid\n" + e.toString() + "\n\n").getBytes(), StandardOpenOption.APPEND);
                 } catch (IOException ex) {
                 }
@@ -841,7 +821,7 @@ public class Bills1 extends javax.swing.JFrame {
                 java.awt.Desktop.getDesktop().browse(url);
             } catch (IOException | URISyntaxException e) {
                 try {
-                    Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), encrypt(new java.util.Date(System.currentTimeMillis()).toString()
+                    Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), LoginPage.encrypt(new java.util.Date(System.currentTimeMillis()).toString()
                             + " Bills:788:BillBtnActionPerformed For Opening WA\n" + e.toString() + "\n\n").getBytes(), StandardOpenOption.APPEND);
                 } catch (IOException ex) {
                 }
@@ -1001,7 +981,7 @@ public class Bills1 extends javax.swing.JFrame {
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             try {
-                Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), encrypt(new java.util.Date(System.currentTimeMillis()).toString()
+                Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), LoginPage.encrypt(new java.util.Date(System.currentTimeMillis()).toString()
                         + " Bills:844:main\n" + ex.toString() + "\n\n").getBytes(), StandardOpenOption.APPEND);
             } catch (IOException e) {
             }

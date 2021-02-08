@@ -1,5 +1,7 @@
 
-import MCsCafe.*;
+
+import MCsCafe.LoginPage;
+import MCsCafe.UserRegistration;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
@@ -39,24 +41,6 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  */
 public class Bills extends javax.swing.JFrame {
 
-    static String encrypt(String str) {
-        char[] c = str.toCharArray();
-        for (int n = 0; n < c.length; n++) {
-            c[n] -= 10;
-        }
-        return new String(c);
-    }
-
-    static String decrypt(String str) {
-        char[] c = str.toCharArray();
-        for (int n = 0; n < c.length; n++) {
-            c[n] += 10;
-        }
-        return new String(c);
-    }
-    
-    ArrayList<Food> list;
-
     /**
      * Creates new form Bills
      */
@@ -87,19 +71,9 @@ public class Bills extends javax.swing.JFrame {
             while (rs.next()) {
                 c.addItem(rs.getString(1));
             }
-            query = "SELECT * FROM food;";
-            rs = stmt.executeQuery(query);
-            list = Food.list(rs);
-            query = "SELECT * FROM food;";
-            rs = stmt.executeQuery(query);
-            //Foodname.setModel(new javax.swing.DefaultComboBoxModel<>(Food.cb(rs)));
-            while (rs.next()) {
-                Foodname.addItem(rs.getString(2));
-            }
-            //AutoCompleteDecorator.decorate(Foodname);
         } catch (ClassNotFoundException | SQLException e) {
             try {
-                Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), encrypt(new java.util.Date(System.currentTimeMillis()).toString()
+                Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), LoginPage.encrypt(new java.util.Date(System.currentTimeMillis()).toString()
                         + " Bills:75:Bills\n" + e.toString() + "\n\n").getBytes(), StandardOpenOption.APPEND);
             } catch (IOException ex) {
             }
@@ -213,9 +187,6 @@ public class Bills extends javax.swing.JFrame {
         WACB = new javax.swing.JCheckBox();
         ParcelCB = new javax.swing.JCheckBox();
         TACB = new javax.swing.JCheckBox();
-        Foodname = new javax.swing.JComboBox<>();
-        Rate = new javax.swing.JTextField();
-        Quantity = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Bill | MC's Café");
@@ -368,71 +339,42 @@ public class Bills extends javax.swing.JFrame {
 
         TACB.setText("Take Away");
 
-        Foodname.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                FoodnameItemStateChanged(evt);
-            }
-        });
-
-        Rate.setEditable(false);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(CancelBtn)
-                .addGap(73, 73, 73)
-                .addComponent(BillBtn)
-                .addGap(58, 58, 58)
-                .addComponent(MenuBtn)
-                .addGap(75, 75, 75))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(183, 183, 183)
-                .addComponent(WACB)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(275, 275, 275)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(TotalTF)
-                            .addComponent(AmountTF)
-                            .addComponent(ReturnTF, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(TACB)
-                                .addGap(18, 18, 18)
-                                .addComponent(ParcelCB)
-                                .addGap(18, 18, 18))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addGap(18, 18, 18)
-                                .addComponent(UPIRB)
-                                .addGap(18, 18, 18)
-                                .addComponent(CardRB)
-                                .addGap(18, 18, 18)
-                                .addComponent(PostpaidRB)
-                                .addGap(18, 18, 18)
-                                .addComponent(CashRB)))))
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(245, 245, 245)
-                        .addComponent(jLabel1))
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(CancelBtn)
+                        .addGap(73, 73, 73)
+                        .addComponent(BillBtn)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(39, 39, 39)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(TotalTF, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                                    .addComponent(AmountTF)
+                                    .addComponent(ReturnTF)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(58, 58, 58)
+                                .addComponent(MenuBtn)))))
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel3))
@@ -448,15 +390,34 @@ public class Bills extends javax.swing.JFrame {
                                 .addGap(65, 65, 65)
                                 .addComponent(jLabel4)
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(MobileTF, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(Quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(MobileTF, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addContainerGap())))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addComponent(Foodname, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(Rate, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(21, 21, 21)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(TACB)
+                                .addGap(18, 18, 18)
+                                .addComponent(ParcelCB))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(18, 18, 18)
+                                .addComponent(UPIRB)
+                                .addGap(18, 18, 18)
+                                .addComponent(CardRB)
+                                .addGap(18, 18, 18)
+                                .addComponent(PostpaidRB)
+                                .addGap(18, 18, 18)
+                                .addComponent(CashRB))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(183, 183, 183)
+                        .addComponent(WACB)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -474,12 +435,7 @@ public class Bills extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(NameCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(MobileTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Foodname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Rate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Quantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -502,7 +458,7 @@ public class Bills extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(ReturnTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
                 .addComponent(WACB)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -571,7 +527,7 @@ public class Bills extends javax.swing.JFrame {
             }
         } catch (HeadlessException | ClassNotFoundException | SQLException e) {
             try {
-                Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), encrypt(new java.util.Date(System.currentTimeMillis()).toString()
+                Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), LoginPage.encrypt(new java.util.Date(System.currentTimeMillis()).toString()
                         + " Bills:521:jButton1ActionPerformed\n" + e.toString() + "\n\n").getBytes(), StandardOpenOption.APPEND);
             } catch (IOException ex) {
             }
@@ -683,7 +639,7 @@ public class Bills extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Bill Processed!");
         } catch (ClassNotFoundException | SQLException e) {
             try {
-                Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), encrypt(new java.util.Date(System.currentTimeMillis()).toString()
+                Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), LoginPage.encrypt(new java.util.Date(System.currentTimeMillis()).toString()
                         + " Bills:632:BillBtnActionPerformed For Inserting into Bill\n" + e.toString() + "\n\n").getBytes(), StandardOpenOption.APPEND);
             } catch (IOException ex) {
             }
@@ -720,7 +676,7 @@ public class Bills extends javax.swing.JFrame {
                 stmt.executeUpdate(query);
             } catch (ClassNotFoundException | SQLException e) {
                 try {
-                    Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), encrypt(new java.util.Date(System.currentTimeMillis()).toString()
+                    Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), LoginPage.encrypt(new java.util.Date(System.currentTimeMillis()).toString()
                             + " Bills:664:BillBtnActionPerformed For Inserting into Queue\n" + e.toString() + "\n\n").getBytes(), StandardOpenOption.APPEND);
                 } catch (IOException ex) {
                 }
@@ -752,7 +708,7 @@ public class Bills extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Postpaid Updated! Outstanding Balance: " + (outstanding + price));
             } catch (ClassNotFoundException | SQLException e) {
                 try {
-                    Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), encrypt(new java.util.Date(System.currentTimeMillis()).toString()
+                    Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), LoginPage.encrypt(new java.util.Date(System.currentTimeMillis()).toString()
                             + " Bills:697:BillBtnActionPerformed For Getting/Inserting from/into Postpaid\n" + e.toString() + "\n\n").getBytes(), StandardOpenOption.APPEND);
                 } catch (IOException ex) {
                 }
@@ -797,7 +753,7 @@ public class Bills extends javax.swing.JFrame {
                 java.awt.Desktop.getDesktop().browse(url);
             } catch (IOException | URISyntaxException e) {
                 try {
-                    Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), encrypt(new java.util.Date(System.currentTimeMillis()).toString()
+                    Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), LoginPage.encrypt(new java.util.Date(System.currentTimeMillis()).toString()
                             + " Bills:788:BillBtnActionPerformed For Opening WA\n" + e.toString() + "\n\n").getBytes(), StandardOpenOption.APPEND);
                 } catch (IOException ex) {
                 }
@@ -836,12 +792,6 @@ public class Bills extends javax.swing.JFrame {
         TACB.setSelected(false);
     }//GEN-LAST:event_ParcelCBItemStateChanged
 
-    private void FoodnameItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_FoodnameItemStateChanged
-        // TODO add your handling code here:
-        if (evt.getStateChange() == ItemEvent.SELECTED && Foodname.getSelectedIndex() != -1)
-            Rate.setText("" + list.get(Foodname.getSelectedIndex()).price);
-    }//GEN-LAST:event_FoodnameItemStateChanged
-
     private ArrayList<Long> numbers;
 
     /**
@@ -862,7 +812,7 @@ public class Bills extends javax.swing.JFrame {
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             try {
-                Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), encrypt(new java.util.Date(System.currentTimeMillis()).toString()
+                Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), LoginPage.encrypt(new java.util.Date(System.currentTimeMillis()).toString()
                         + " Bills:844:main\n" + ex.toString() + "\n\n").getBytes(), StandardOpenOption.APPEND);
             } catch (IOException e) {
             }
@@ -886,14 +836,11 @@ public class Bills extends javax.swing.JFrame {
     private javax.swing.JButton CancelBtn;
     private javax.swing.JRadioButton CardRB;
     private javax.swing.JRadioButton CashRB;
-    private javax.swing.JComboBox<String> Foodname;
     private javax.swing.JButton MenuBtn;
     private javax.swing.JTextField MobileTF;
     private javax.swing.JComboBox<String> NameCB;
     private javax.swing.JCheckBox ParcelCB;
     private javax.swing.JRadioButton PostpaidRB;
-    private javax.swing.JTextField Quantity;
-    private javax.swing.JTextField Rate;
     private javax.swing.JTextField ReturnTF;
     private javax.swing.JCheckBox TACB;
     private javax.swing.JTextField TotalTF;

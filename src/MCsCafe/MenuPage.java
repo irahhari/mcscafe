@@ -5,8 +5,6 @@
  */
 package MCsCafe;
 
-import java.util.Calendar;
-import javax.swing.JOptionPane;
 
 /**
  *

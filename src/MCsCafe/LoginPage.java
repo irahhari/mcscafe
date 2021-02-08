@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
  */
 public class LoginPage extends javax.swing.JFrame {
 
-    static String encrypt(String str) {
+    public static String encrypt(String str) {
         char[] c = str.toCharArray();
         for (int n = 0; n < c.length; n++) {
             c[n] -= 10;
@@ -22,7 +22,7 @@ public class LoginPage extends javax.swing.JFrame {
         return new String(c);
     }
 
-    static String decrypt(String str) {
+    public static String decrypt(String str) {
         char[] c = str.toCharArray();
         for (int n = 0; n < c.length; n++) {
             c[n] += 10;
