@@ -1,0 +1,647 @@
+package MCsCafe;
+
+
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.sql.*;
+import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
+/**
+ *
+ * @author harig
+ */
+public class Postpaid extends javax.swing.JFrame {
+
+    private TableRowSorter<TableModel> rowSorter;
+
+    /**
+     * Creates new form Postpaid
+     */
+    public Postpaid() {
+        File file = new File(System.getProperty("user.dir") + "\\lib\\log.txt");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException ex) {
+            }
+        }
+        initComponents();
+        rowSorter = new TableRowSorter<>(Postpaid.getModel());
+        Postpaid.setRowSorter(rowSorter);
+        SearchMobile.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                String text = SearchMobile.getText();
+
+                if (text.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                }
+            }
+
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                String text = SearchMobile.getText();
+
+                if (text.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                }
+            }
+
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
+        SearchMobile.setTransferHandler(null);
+        Paying.setTransferHandler(null);
+        Paying.setEnabled(false);
+        Connection con = null;
+        Statement stmt = null, qwer = null;
+        ResultSet rs = null, tt = null;
+        DefaultTableModel model = (DefaultTableModel) Postpaid.getModel();
+        try {
+            Class.forName("java.sql.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/mcscafe", "mcscafe", "hari");
+            stmt = con.createStatement();
+            qwer = con.createStatement();
+            String query = "SELECT Name, Address, p.Mobile, Outstanding FROM Postpaid AS p LEFT JOIN User AS u ON p.Mobile=u.Mobile;";
+            String total = "SELECT SUM(Outstanding) FROM Postpaid;";
+            rs = stmt.executeQuery(query);
+            tt = qwer.executeQuery(total);
+            while (rs.next()) {
+                model.addRow(new Object[]{rs.getString(1), rs.getString(2), rs.getLong(3), rs.getInt(4)});
+            }
+            tt.next();
+            jLabel31.setText("" + tt.getInt(1));
+        } catch (ClassNotFoundException | SQLException e) {
+            try {
+                Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), LoginPage.encrypt(new java.util.Date(System.currentTimeMillis()).toString()
+                        + " Postpaid:101:Postpaid\n" + e.toString() + "\n\n").getBytes(), StandardOpenOption.APPEND);
+            } catch (IOException ex) {
+            }
+        } finally {
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException ex) {
+                }
+            }
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException ex) {
+                }
+            }
+            if (qwer != null) {
+                try {
+                    qwer.close();
+                } catch (SQLException ex) {
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                }
+            }
+            if (tt != null) {
+                try {
+                    tt.close();
+                } catch (SQLException ex) {
+                }
+            }
+        }
+    }
+
+    public Postpaid(String mobile) {
+        this();
+        SearchMobile.setText(mobile);
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Postpaid = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        Paying = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        Pay = new javax.swing.JButton();
+        Cancel = new javax.swing.JButton();
+        jLabel15 = new javax.swing.JLabel();
+        SearchMobile = new javax.swing.JTextField();
+        Menu = new javax.swing.JButton();
+        PayingRB = new javax.swing.JRadioButton();
+        Returning = new javax.swing.JRadioButton();
+        Final = new javax.swing.JTextField();
+        Name = new javax.swing.JTextField();
+        Address = new javax.swing.JTextField();
+        Mobile = new javax.swing.JTextField();
+        Outstanding = new javax.swing.JTextField();
+        jLabel31 = new javax.swing.JTextField();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Postpaid | MC's Café");
+
+        jLabel1.setText("Postpaid");
+
+        Postpaid.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Name", "Address", "Mobile Number", "Outstanding"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        Postpaid.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                PostpaidMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(Postpaid);
+        if (Postpaid.getColumnModel().getColumnCount() > 0) {
+            Postpaid.getColumnModel().getColumn(0).setResizable(false);
+            Postpaid.getColumnModel().getColumn(1).setResizable(false);
+            Postpaid.getColumnModel().getColumn(2).setResizable(false);
+            Postpaid.getColumnModel().getColumn(3).setResizable(false);
+        }
+
+        jLabel2.setText("Total Outstanding");
+
+        jLabel4.setText("Name");
+
+        jLabel6.setText("Address");
+
+        jLabel8.setText("Mobile");
+
+        jLabel10.setText("Outstanding");
+
+        Paying.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                PayingKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                PayingKeyTyped(evt);
+            }
+        });
+
+        jLabel13.setText("Final Outstanding");
+
+        Pay.setMnemonic('P');
+        Pay.setText("Pay");
+        Pay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PayActionPerformed(evt);
+            }
+        });
+
+        Cancel.setMnemonic('C');
+        Cancel.setText("Cancel");
+        Cancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelActionPerformed(evt);
+            }
+        });
+
+        jLabel15.setText("Enter the keyword you want to search");
+
+        SearchMobile.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                SearchMobileKeyTyped(evt);
+            }
+        });
+
+        Menu.setMnemonic('M');
+        Menu.setText("Back to Menu");
+        Menu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(PayingRB);
+        PayingRB.setText("Paying");
+        PayingRB.setToolTipText("Customer paying us");
+        PayingRB.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                PayingRBMouseClicked(evt);
+            }
+        });
+
+        buttonGroup1.add(Returning);
+        Returning.setText("Returning");
+        Returning.setToolTipText("Returning the customer paid advance amount");
+        Returning.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ReturningMouseClicked(evt);
+            }
+        });
+
+        Final.setEditable(false);
+        Final.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        Final.setEnabled(false);
+
+        Name.setEditable(false);
+        Name.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        Name.setEnabled(false);
+
+        Address.setEditable(false);
+        Address.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        Address.setEnabled(false);
+
+        Mobile.setEditable(false);
+        Mobile.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        Mobile.setEnabled(false);
+
+        Outstanding.setEditable(false);
+        Outstanding.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        Outstanding.setEnabled(false);
+
+        jLabel31.setEditable(false);
+        jLabel31.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jLabel31.setEnabled(false);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel4)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(181, 181, 181)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addComponent(jLabel15)
+                        .addGap(18, 18, 18)
+                        .addComponent(SearchMobile, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(48, 103, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(Menu)
+                        .addGap(66, 66, 66)
+                        .addComponent(Cancel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Pay)
+                        .addGap(43, 43, 43))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel10))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(Address, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                            .addComponent(Name)
+                            .addComponent(Mobile, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Outstanding))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(60, 60, 60)
+                                .addComponent(PayingRB)
+                                .addGap(18, 18, 18)
+                                .addComponent(Returning))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(Paying)
+                                    .addComponent(Final, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(31, 31, 31))))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel15)
+                            .addComponent(SearchMobile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(Name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Address, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Mobile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8))
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(PayingRB)
+                            .addComponent(Returning))
+                        .addGap(18, 18, 18)
+                        .addComponent(Paying, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Final, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel13))
+                        .addGap(3, 3, 3)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Outstanding, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Menu)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(Pay)
+                        .addComponent(Cancel)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void PostpaidMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PostpaidMouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) Postpaid.getModel();
+        int row = Postpaid.convertRowIndexToModel(Postpaid.getSelectedRow());
+        Name.setText(model.getValueAt(row, 0).toString());
+        Address.setText(model.getValueAt(row, 1).toString());
+        Mobile.setText(model.getValueAt(row, 2).toString());
+        Outstanding.setText(model.getValueAt(row, 3).toString());
+        Paying.setEnabled(true);
+        buttonGroup1.clearSelection();
+    }//GEN-LAST:event_PostpaidMouseClicked
+
+    private void PayingKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PayingKeyReleased
+        // TODO add your handling code here:
+        int outstanding = Integer.parseInt(Outstanding.getText()), paying;
+        try {
+            paying = Integer.parseInt(Paying.getText());
+            if (Returning.isSelected()) {
+                paying *= -1;
+            }
+        } catch (NumberFormatException e) {
+            paying = 0;
+        }
+
+        if (!"".equals(Paying.getText())) {
+            Final.setText(outstanding - paying + "");
+        } else {
+            Final.setText("");
+        }
+    }//GEN-LAST:event_PayingKeyReleased
+
+    private void PayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PayActionPerformed
+        // TODO add your handling code here:
+        if ((PayingRB.isSelected() || Returning.isSelected()) && (Paying.getText().length() > 0)) {
+            int outstanding = Integer.parseInt(Outstanding.getText());
+            int paying = Integer.parseInt(Paying.getText());
+            if (Returning.isSelected()) {
+                paying *= -1;
+            }
+            Connection con = null;
+            Statement stmt = null;
+            try {
+                Class.forName("java.sql.Driver");
+                con = DriverManager.getConnection("jdbc:mysql://localhost/mcscafe", "mcscafe", "hari");
+                stmt = con.createStatement();
+                String query;
+                if (outstanding - paying == 0) {
+                    query = "DELETE FROM Postpaid WHERE Mobile = " + Mobile.getText() + ";";
+                    stmt.executeUpdate(query);
+                } else {
+                    query = "UPDATE Postpaid SET Outstanding = Outstanding - " + paying + " WHERE Mobile = " + Mobile.getText() + ";";
+                    stmt.executeUpdate(query);
+                }
+            } catch (ClassNotFoundException | SQLException e) {
+                try {
+                    Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), LoginPage.encrypt(new java.util.Date(System.currentTimeMillis()).toString()
+                            + " Postpaid:493:PayActionPerformed\n" + e.toString() + "\n\n").getBytes(), StandardOpenOption.APPEND);
+                } catch (IOException ex) {
+                }
+            } finally {
+                if (con != null) {
+                    try {
+                        con.close();
+                    } catch (SQLException ex) {
+                    }
+                }
+                if (stmt != null) {
+                    try {
+                        stmt.close();
+                    } catch (SQLException ex) {
+                    }
+                }
+            }
+            try {
+                URI url;
+                if (PayingRB.isSelected()) {
+                    url = new URI(("https://wa.me/91" + Mobile.getText() + "?text=Hello%20from%20MC's%20Café!%0D%0A%0D%0A"
+                            + "Outstanding%20before%20transaction%20=%20%E2%82%B9%20" + Outstanding.getText() + "%0D%0A"
+                            + "Paying%20to%20Curry%20House%20=%20%E2%82%B9%20" + Paying.getText() + "%0D%0A"
+                            + "Current%20Outstanding%20=%20%E2%82%B9%20" + Final.getText() + "%0D%0A%0D%0A"
+                            + "Thank%20you%20for%20dining%20with%20us%2C%0D%0AHope%20to%20see%20you%20again!").replaceAll(" ", "%20"));
+                } else {
+                    url = new URI(("https://wa.me/91" + Mobile.getText() + "?text=Hello%20from%20MC's%20Café!%0D%0A%0D%0A"
+                            + "Outstanding%20before%20transaction%20=%20%E2%82%B9%20" + Outstanding.getText() + "%0D%0A"
+                            + "Returning%20from%20Curry%20House%20=%20%E2%82%B9%20" + Paying.getText() + "%0D%0A"
+                            + "Current%20Outstanding%20=%20%E2%82%B9%20" + Final.getText() + "%0D%0A%0D%0A"
+                            + "Thank%20you%20for%20dining%20with%20us%2C%0D%0AHope%20to%20see%20you%20again!").replaceAll(" ", "%20"));
+                }
+                java.awt.Desktop.getDesktop().browse(url);
+            } catch (IOException | URISyntaxException e) {
+                try {
+                    Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), LoginPage.encrypt(new java.util.Date(System.currentTimeMillis()).toString()
+                            + " Postpaid:529:PayActionPerformed\n" + e.toString() + "\n\n").getBytes(), StandardOpenOption.APPEND);
+                } catch (IOException ex) {
+                }
+            }
+            Cancel.doClick();
+        } else {
+            JOptionPane.showMessageDialog(this, "All inputs are required", "Enter all inputs", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_PayActionPerformed
+
+    private void CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        new Postpaid().setVisible(true);
+    }//GEN-LAST:event_CancelActionPerformed
+
+    private void SearchMobileKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SearchMobileKeyTyped
+        // TODO add your handling code here:
+        if (SearchMobile.getText().length() >= 10 || !Character.isLetterOrDigit(evt.getKeyChar()))
+            evt.consume();
+    }//GEN-LAST:event_SearchMobileKeyTyped
+
+    private void PayingKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PayingKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if (!(c >= 48 && c <= 57)) {
+            evt.consume();
+        }
+        int outstanding = Integer.parseInt(Outstanding.getText()), paying;
+        try {
+            if ('0' <= c && c <= '9') {
+                paying = Integer.parseInt(Paying.getText() + c);
+            } else {
+                paying = Integer.parseInt(Paying.getText());
+            }
+        } catch (NumberFormatException e) {
+            paying = 0;
+        }
+        if (Returning.isSelected() && paying > outstanding * -1) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_PayingKeyTyped
+
+    private void MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        new MenuPage().setVisible(true);
+    }//GEN-LAST:event_MenuActionPerformed
+
+    private void PayingRBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PayingRBMouseClicked
+        // TODO add your handling code here:
+        Paying.setText("");
+    }//GEN-LAST:event_PayingRBMouseClicked
+
+    private void ReturningMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ReturningMouseClicked
+        // TODO add your handling code here:
+        Paying.setText("");
+    }//GEN-LAST:event_ReturningMouseClicked
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            try {
+                Files.write(Paths.get(System.getProperty("user.dir") + "\\lib\\log.txt"), LoginPage.encrypt(new java.util.Date(System.currentTimeMillis()).toString()
+                        + " Postpaid:607:main\n" + ex.toString() + "\n\n").getBytes(), StandardOpenOption.APPEND);
+            } catch (IOException e) {
+            }
+        }
+        //</editor-fold>
+        
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new Postpaid().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField Address;
+    private javax.swing.JButton Cancel;
+    private javax.swing.JTextField Final;
+    private javax.swing.JButton Menu;
+    private javax.swing.JTextField Mobile;
+    private javax.swing.JTextField Name;
+    private javax.swing.JTextField Outstanding;
+    private javax.swing.JButton Pay;
+    private javax.swing.JTextField Paying;
+    private javax.swing.JRadioButton PayingRB;
+    private javax.swing.JTable Postpaid;
+    private javax.swing.JRadioButton Returning;
+    private javax.swing.JTextField SearchMobile;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JTextField jLabel31;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JScrollPane jScrollPane1;
+    // End of variables declaration//GEN-END:variables
+}

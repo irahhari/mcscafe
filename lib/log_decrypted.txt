@@ -1,0 +1,41 @@
+Sun Jan 31 21:05:03 IST 2021 Logged In
+
+Mon Feb 01 01:16:14 IST 2021 Logged In
+
+Mon Feb 01 01:21:16 IST 2021 Queues:561:jButton4ActionPerformed
+java.sql.SQLSyntaxErrorException: Query was empty
+
+Mon Feb 01 01:21:18 IST 2021 Queues:561:jButton4ActionPerformed
+java.sql.SQLSyntaxErrorException: Query was empty
+
+Mon Feb 01 01:21:18 IST 2021 Queues:561:jButton4ActionPerformed
+java.sql.SQLSyntaxErrorException: Query was empty
+
+Mon Feb 01 01:21:19 IST 2021 Queues:561:jButton4ActionPerformed
+java.sql.SQLSyntaxErrorException: Query was empty
+
+Mon Feb 01 01:21:19 IST 2021 Queues:561:jButton4ActionPerformed
+java.sql.SQLSyntaxErrorException: Query was empty
+
+Mon Feb 01 01:21:19 IST 2021 Queues:561:jButton4ActionPerformed
+java.sql.SQLSyntaxErrorException: Query was empty
+
+Mon Feb 01 01:21:20 IST 2021 Queues:561:jButton4ActionPerformed
+java.sql.SQLSyntaxErrorException: Query was empty
+
+Sat Feb 06 20:58:05 IST 2021 Logged In
+
+Sat Feb 06 21:16:32 IST 2021 Logged Out
+
+Sun Feb 07 03:31:33 IST 2021 Bills:75:Bills
+java.sql.SQLException: Operation not allowed for a result set of type ResultSet.TYPE_FORWARD_ONLY.
+
+Sun Feb 07 03:36:00 IST 2021 Bills:75:Bills
+java.sql.SQLException: Operation not allowed for a result set of type ResultSet.TYPE_FORWARD_ONLY.
+
+Sun Feb 07 03:36:32 IST 2021 Bills:75:Bills
+java.sql.SQLException: Operation not allowed for a result set of type ResultSet.TYPE_FORWARD_ONLY.
+
+Sun Feb 07 03:36:43 IST 2021 Bills:75:Bills
+java.sql.SQLException: Operation not allowed for a result set of type ResultSet.TYPE_FORWARD_ONLY.
+
